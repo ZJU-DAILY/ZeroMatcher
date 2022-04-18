@@ -1,0 +1,36 @@
+version: 1
+formatters:
+  default:
+    (): uvicorn.logging.DefaultFormatter
+    fmt: '%(asctime)s %(levelname)s [%(filename)s:%(lineno)d]: %(message)s'
+    # fmt: '%(asctime)s %(levelname)s %(message)s'
+    use_colors: false
+handlers:
+  console:
+    formatter: default
+    class: logging.StreamHandler
+    stream: 'ext://sys.stderr'
+  file:
+    formatter: default
+    class: logging.handlers.RotatingFileHandler
+    filename: app.logs
+loggers:
+  uvicorn:
+    handlers:
+      - console
+      - file
+    level: INFO
+  uvicorn.error:
+    level: INFO
+  uvicorn.access:
+    handlers:
+      - console
+      - file
+    level: INFO
+    propagate: false
+  'zxcDemo:app':
+    handlers:
+      - console
+      - file
+    level: DEBUG
+    propagate: false
